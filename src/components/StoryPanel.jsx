@@ -1,4 +1,5 @@
 import { StatusBadge } from "./StatusBadge";
+import { MemoryTimeline } from "./MemoryTimeline";
 
 export function StoryPanel({ place, onClose }) {
   if (!place) return null;
@@ -93,6 +94,8 @@ export function StoryPanel({ place, onClose }) {
               </audio>
             </div>
           )}
+
+          <MemoryTimeline placeId={place.id} />
         </div>
 
         <footer

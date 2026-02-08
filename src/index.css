@@ -73,3 +73,23 @@ a:focus-visible,
 .animate-slide-in-right {
   animation: slide-in-right 0.4s ease-out forwards;
 }
+
+/* Memory timeline — Choose file button */
+.memory-timeline__file-input::file-selector-button,
+.memory-timeline__file-input::-webkit-file-upload-button {
+  margin-right: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--border-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.memory-timeline__file-input::file-selector-button:hover,
+.memory-timeline__file-input::-webkit-file-upload-button:hover {
+  background: #e0dce5;
+}
