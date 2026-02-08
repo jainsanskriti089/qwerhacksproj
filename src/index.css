@@ -1,23 +1,38 @@
 @import "tailwindcss";
 
-/* What Was Here — calm, archival base */
+/* What Was Here — warm, inclusive, queer-affirming palette */
 :root {
-  /* Soft neutrals — avoid pure black/white */
-  --bg-base: #f5f2ed;
-  --text-primary: #2c2926;
-  --text-secondary: #5c5652;
-  --text-muted: #7a736e;
-  --border-subtle: #e5e0d9;
-  /* Muted status accents */
-  --status-active: #4a7c59;
-  --status-threatened: #b8860b;
-  --status-erased: #8b4545;
+  /* Warm base — cream with a hint of lavender (inclusive, soft) */
+  --bg-base: #f8f6f9;
+  --bg-panel: #fffefc;
+  --bg-warm: #fdf8f3;
+  /* Text — dark purple-brown for readability & warmth (WCAG AA) */
+  --text-primary: #2d2838;
+  --text-secondary: #5c5468;
+  --text-muted: #7a7285;
+  --border-subtle: #e8e4ed;
+  /* Pride-inclusive accents (vibrant but not harsh) */
+  --accent-pink: #c76b8a;
+  --accent-purple: #7b6b9e;
+  --accent-blue: #5b7a9e;
+  --accent-teal: #4a8b85;
+  --accent-gold: #b8923d;
+  --accent-coral: #c76b5a;
+  /* Trans flag inspired (soft) */
+  --trans-blue: #7eb8d4;
+  --trans-pink: #d4a8b8;
+  /* Status — meaningful & hopeful */
+  --status-active: #3d8b6e;
+  --status-threatened: #b8923d;
+  --status-erased: #a65d5d;
+  /* Focus — high contrast for accessibility */
+  --focus-ring: #5b7a9e;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: var(--bg-base);
+  background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-warm) 100%);
   color: var(--text-primary);
   font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   font-size: 1rem;
@@ -25,12 +40,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Focus for accessibility */
+/* Focus for accessibility — visible, high contrast */
 button:focus-visible,
 a:focus-visible,
 [tabindex="0"]:focus-visible {
-  outline: 2px solid var(--text-secondary);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* StoryPanel slide-in — slow and intentional */

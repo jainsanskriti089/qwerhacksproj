@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { PLACES, MAP_CENTER, MAP_ZOOM } from '../data/places';
+import './Map.css';
 
 // Fix default marker icons in react-leaflet (webpack/vite)
 const DefaultIcon = L.icon({
@@ -60,19 +61,20 @@ export default function Map({
             click: () => onSelectPlace?.(place),
           }}
         >
-          <Popup>
-            <strong>{place.name}</strong>
-            {onSelectPlace && (
-              <div>
+          <Popup className="place-popup" minWidth={240}>
+            <div className="place-popup__inner" data-status={place.status}>
+              <p className="place-popup__name">{place.name}</p>
+              <p className="place-popup__city">{place.city}</p>
+              {onSelectPlace && (
                 <button
                   type="button"
+                  className="place-popup__btn"
                   onClick={() => onSelectPlace(place)}
-                  style={{ marginTop: 6 }}
                 >
-                  Select
+                  Read story
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </Popup>
         </Marker>
       ))}

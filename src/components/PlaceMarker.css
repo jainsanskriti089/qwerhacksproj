@@ -1,32 +1,34 @@
 .place-marker {
   border-radius: 9999px;
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.95);
   cursor: pointer;
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
   padding: 0;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(45, 40, 56, 0.2);
 }
 
 .place-marker:hover,
 .place-marker:focus {
-  transform: scale(1.1);
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px rgba(45, 40, 56, 0.25);
 }
 
 .place-marker:focus {
   outline: none;
-  box-shadow: 0 0 0 2px white;
+  box-shadow: 0 0 0 3px rgba(123, 107, 158, 0.5);
 }
 
 .place-marker--active {
-  background-color: #4a7c59;
+  background: linear-gradient(145deg, #4a9b7a, #3d8b6e);
 }
 
 .place-marker--threatened {
-  background-color: #b8860b;
+  background: linear-gradient(145deg, #c9a84a, #b8923d);
 }
 
 .place-marker--erased {
-  background-color: #8b4545;
+  background: linear-gradient(145deg, #b86b6b, #a65d5d);
 }
 
 .place-marker--threatened.pulse {
@@ -39,16 +41,16 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.75;
+    opacity: 0.85;
   }
 }
 
 .place-marker--selected {
-  transform: scale(1.25);
-  box-shadow: 0 0 0 2px white, 0 4px 14px rgba(0, 0, 0, 0.4);
+  transform: scale(1.3);
+  box-shadow: 0 0 0 3px white, 0 6px 20px rgba(45, 40, 56, 0.35);
 }
 
 .place-marker--selected:hover,
 .place-marker--selected:focus {
-  transform: scale(1.3);
+  transform: scale(1.35);
 }

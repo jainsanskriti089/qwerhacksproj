@@ -6,52 +6,83 @@ export function StoryPanel({ place, onClose }) {
   return (
     <>
       <div
-        className="fixed inset-0 bg-black/20 z-30 transition-opacity duration-300 ease-out"
+        className="fixed inset-0 transition-opacity duration-300 ease-out"
+        style={{ backgroundColor: "rgba(45, 40, 56, 0.25)", zIndex: 1000 }}
         aria-hidden="true"
         onClick={onClose}
       />
       <aside
-        className="fixed top-0 right-0 h-full w-full max-w-md bg-[var(--bg-base)] shadow-xl z-40 flex flex-col animate-slide-in-right"
+        className="fixed top-0 right-0 h-full w-full max-w-md shadow-2xl flex flex-col animate-slide-in-right"
+        style={{
+          backgroundColor: "var(--bg-panel)",
+          borderLeft: "4px solid var(--accent-purple)",
+          boxShadow: "-4px 0 24px rgba(91, 122, 158, 0.12)",
+          zIndex: 1001,
+        }}
         role="dialog"
         aria-label={`Story: ${place.name}`}
       >
-        <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-[var(--border-subtle)]">
-          <h2 className="text-lg font-medium text-[var(--text-primary)] m-0 pr-4">
+        <div
+          className="shrink-0 flex items-center justify-between px-6 py-4"
+          style={{ borderBottom: "1px solid var(--border-subtle)" }}
+        >
+          <h2
+            className="text-xl font-semibold m-0 pr-4"
+            style={{ color: "var(--accent-purple)" }}
+          >
             {place.name}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="shrink-0 p-2 rounded text-[var(--text-secondary)] hover:bg-[var(--border-subtle)] transition-colors duration-200"
+            className="shrink-0 p-2 rounded-full transition-colors duration-200 hover:opacity-80 focus:opacity-80"
+            style={{ color: "var(--text-secondary)", backgroundColor: "var(--border-subtle)" }}
             aria-label="Close panel"
           >
-            <span className="text-lg leading-none" aria-hidden="true">×</span>
+            <span className="text-xl leading-none" aria-hidden="true">×</span>
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
-          <p className="text-sm text-[var(--text-secondary)]">
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5">
+          <p
+            className="text-sm font-medium"
+            style={{ color: "var(--text-secondary)" }}
+          >
             {place.city} · {place.years}
           </p>
           <div>
             <StatusBadge status={place.status} />
           </div>
 
-          <div className="pt-2">
-            <p className="text-[1.05rem] leading-relaxed text-[var(--text-primary)] whitespace-pre-wrap">
+          <div className="pt-1">
+            <p
+              className="text-[1.1rem] leading-relaxed whitespace-pre-wrap"
+              style={{ color: "var(--text-primary)" }}
+            >
               {place.story}
             </p>
           </div>
 
           {place.quote && (
-            <blockquote className="text-[var(--text-muted)] italic text-base border-l-2 border-[var(--border-subtle)] pl-4 py-1">
+            <blockquote
+              className="italic text-lg border-l-4 pl-4 py-2 my-4"
+              style={{
+                color: "var(--text-muted)",
+                borderColor: "var(--accent-pink)",
+              }}
+            >
               "{place.quote}"
             </blockquote>
           )}
 
           {place.audioUrl && (
             <div className="pt-2">
-              <p className="text-sm text-[var(--text-secondary)] mb-2">Listen</p>
+              <p
+                className="text-sm font-medium mb-2"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                Listen
+              </p>
               <audio
                 controls
                 src={place.audioUrl}
@@ -64,8 +95,17 @@ export function StoryPanel({ place, onClose }) {
           )}
         </div>
 
-        <footer className="shrink-0 px-6 py-3 border-t border-[var(--border-subtle)] bg-[var(--bg-base)]">
-          <p className="text-xs text-[var(--text-muted)]">
+        <footer
+          className="shrink-0 px-6 py-3"
+          style={{
+            borderTop: "1px solid var(--border-subtle)",
+            backgroundColor: "var(--bg-warm)",
+          }}
+        >
+          <p
+            className="text-xs"
+            style={{ color: "var(--text-muted)" }}
+          >
             AI assists with summaries and narration. Original stories remain the source of truth.
           </p>
         </footer>

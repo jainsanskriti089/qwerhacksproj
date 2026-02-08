@@ -2,13 +2,15 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--bg-base);
+  background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-warm) 100%);
 }
 
 .map-wrap {
   position: relative;
   flex: 1;
   min-height: 0;
+  z-index: 0;
+  isolation: isolate;
 }
 
 .map-wrap .mapboxgl-map,
@@ -20,14 +22,15 @@
   height: 100%;
 }
 
-/* Subtle bottom gradient so markers feel grounded */
+/* Gradient overlay — warm, grounded (pride-friendly tint) */
 .map-gradient-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: linear-gradient(
     to top,
-    rgba(245, 242, 237, 0.4) 0%,
-    transparent 25%
+    rgba(248, 246, 249, 0.5) 0%,
+    rgba(253, 248, 243, 0.2) 15%,
+    transparent 30%
   );
 }
