@@ -106,9 +106,9 @@ export function StoryPanel({ place, onClose }) {
         onClick={onClose}
       />
       <aside
-        className="fixed top-0 right-0 h-full w-full max-w-md shadow-2xl flex flex-col animate-slide-in-right"
+        className="fixed top-0 right-0 h-full w-full max-w-md flex flex-col animate-slide-in-right shadow-2xl"
         style={{
-          backgroundColor: "var(--bg-panel)",
+          backgroundColor: "#e8e4f0",
           borderLeft: "4px solid var(--accent-purple)",
           boxShadow: "-4px 0 24px rgba(91, 122, 158, 0.12)",
           zIndex: 1001,
@@ -117,8 +117,8 @@ export function StoryPanel({ place, onClose }) {
         aria-label={`Story: ${place.name}`}
       >
         <div
-          className="shrink-0 flex items-center justify-between px-6 py-4"
-          style={{ borderBottom: "1px solid var(--border-subtle)" }}
+          className="shrink-0 flex items-center justify-between border-b border-[var(--border-subtle)] px-6 py-4"
+          style={{ backgroundColor: "#ddd6e8" }}
         >
           <h2
             className="text-xl font-semibold m-0 pr-4"
@@ -382,7 +382,7 @@ export function StoryPanel({ place, onClose }) {
           className="shrink-0 px-6 py-3"
           style={{
             borderTop: "1px solid var(--border-subtle)",
-            backgroundColor: "var(--bg-warm)",
+            backgroundColor: "#ddd6e8",
           }}
         >
           <p

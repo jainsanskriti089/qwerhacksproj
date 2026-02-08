@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { PlaceMarker } from "./PlaceMarker";
+import "./MapView.css";
 
 const US_CENTER = [-98, 39];
 const DEFAULT_ZOOM = 3.5;
@@ -22,12 +23,14 @@ export function MapView({ places, selectedPlace, onSelect }) {
       return;
     }
     mapboxgl.accessToken = token;
-    mapRef.current = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: containerRef.current,
       style: "mapbox://styles/mapbox/light-v11",
       center: US_CENTER,
       zoom: DEFAULT_ZOOM,
     });
+    map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
+    mapRef.current = map;
     return () => {
       markersRef.current.forEach(({ marker, root }) => {
         marker.remove();
@@ -90,7 +93,7 @@ export function MapView({ places, selectedPlace, onSelect }) {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full relative"
+      className="map-view-container w-full h-full relative"
       style={{ minHeight: 300 }}
     />
   );

@@ -47,7 +47,7 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
     setSubmitting(false);
 
     if (!result) {
-      setGeocodeError("We couldn’t find that address. Please check it and try again.");
+      setGeocodeError("We couldn't find that address. Please check it and try again.");
       return;
     }
 
@@ -70,31 +70,34 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
     onClose();
   };
 
+  const inputClass =
+    "w-full rounded-xl border border-[var(--border-subtle)] bg-white px-3 py-2.5 text-[var(--text-primary)] transition-colors focus:border-[var(--focus-ring)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]/30";
+
   return (
     <div
-      className="fixed inset-0 z-30 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 p-4 animate-fade-in"
       role="dialog"
       aria-modal="true"
       aria-labelledby="add-place-title"
     >
-      <div className="w-full max-w-md rounded-lg bg-[var(--bg-panel)] shadow-xl border border-[var(--border-subtle)]">
-        <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3">
-          <h2 id="add-place-title" className="text-lg font-medium text-[var(--text-primary)]">
+      <div className="w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-panel)] shadow-2xl animate-scale-in">
+        <div className="flex items-center justify-between rounded-t-2xl border-b border-[var(--border-subtle)] bg-[var(--bg-warm)] px-5 py-4">
+          <h2 id="add-place-title" className="text-lg font-semibold text-[var(--accent-purple)]">
             Add a place by address
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="text-[var(--text-muted)] hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 rounded"
+            className="rounded-xl p-2 text-[var(--text-muted)] transition-all hover:bg-[var(--border-subtle)] hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2"
             aria-label="Close"
           >
             Close
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 p-5">
           <div>
-            <label htmlFor={nameId} className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+            <label htmlFor={nameId} className="mb-1 block text-sm font-medium text-[var(--text-primary)]">
               Place name <span className="text-[var(--status-erased)]">*</span>
             </label>
             <input
@@ -103,13 +106,13 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded border border-[var(--border-subtle)] bg-white px-3 py-2 text-[var(--text-primary)] focus:border-[var(--focus-ring)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]/50"
+              className={inputClass}
               placeholder="e.g. The Stud"
             />
           </div>
 
           <div>
-            <label htmlFor={addressId} className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+            <label htmlFor={addressId} className="mb-1 block text-sm font-medium text-[var(--text-primary)]">
               Address <span className="text-[var(--status-erased)]">*</span>
             </label>
             <input
@@ -121,19 +124,19 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
                 setAddress(e.target.value);
                 setGeocodeError(null);
               }}
-              className="w-full rounded border border-[var(--border-subtle)] bg-white px-3 py-2 text-[var(--text-primary)] focus:border-[var(--focus-ring)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]/50"
+              className={inputClass}
               placeholder="Street, city, or region"
               autoComplete="off"
             />
             {geocodeError && (
-              <p className="mt-1 text-sm text-[var(--status-erased)]" role="alert">
+              <p className="mt-1.5 text-sm text-[var(--status-erased)]" role="alert">
                 {geocodeError}
               </p>
             )}
           </div>
 
           <div>
-            <label htmlFor={storyId} className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+            <label htmlFor={storyId} className="mb-1 block text-sm font-medium text-[var(--text-primary)]">
               Story / description <span className="text-[var(--status-erased)]">*</span>
             </label>
             <textarea
@@ -142,13 +145,13 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
               value={story}
               onChange={(e) => setStory(e.target.value)}
               rows={3}
-              className="w-full rounded border border-[var(--border-subtle)] bg-white px-3 py-2 text-[var(--text-primary)] focus:border-[var(--focus-ring)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]/50 resize-y"
+              className={`${inputClass} resize-y`}
               placeholder="What happened here? Why does it matter?"
             />
           </div>
 
           <div>
-            <label htmlFor={quoteId} className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+            <label htmlFor={quoteId} className="mb-1 block text-sm font-medium text-[var(--text-primary)]">
               Quote <span className="text-[var(--text-muted)]">(optional)</span>
             </label>
             <input
@@ -156,13 +159,13 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
               type="text"
               value={quote}
               onChange={(e) => setQuote(e.target.value)}
-              className="w-full rounded border border-[var(--border-subtle)] bg-white px-3 py-2 text-[var(--text-primary)] focus:border-[var(--focus-ring)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]/50"
+              className={inputClass}
               placeholder="A short quote or memory"
             />
           </div>
 
           <div>
-            <label htmlFor={statusId} className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+            <label htmlFor={statusId} className="mb-1 block text-sm font-medium text-[var(--text-primary)]">
               Status <span className="text-[var(--status-erased)]">*</span>
             </label>
             <select
@@ -170,7 +173,7 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
               required
               value={status}
               onChange={(e) => setStatus(e.target.value as StatusOption)}
-              className="w-full rounded border border-[var(--border-subtle)] bg-white px-3 py-2 text-[var(--text-primary)] focus:border-[var(--focus-ring)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]/50"
+              className={inputClass}
             >
               <option value="active">Active</option>
               <option value="threatened">Threatened</option>
@@ -180,7 +183,7 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor={startDateId} className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+              <label htmlFor={startDateId} className="mb-1 block text-sm font-medium text-[var(--text-primary)]">
                 Start date <span className="text-[var(--status-erased)]">*</span>
               </label>
               <input
@@ -189,12 +192,12 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
                 required
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full rounded border border-[var(--border-subtle)] bg-white px-3 py-2 text-[var(--text-primary)] focus:border-[var(--focus-ring)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]/50"
+                className={inputClass}
                 placeholder="YYYY or YYYY-MM"
               />
             </div>
             <div>
-              <label htmlFor={endDateId} className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+              <label htmlFor={endDateId} className="mb-1 block text-sm font-medium text-[var(--text-primary)]">
                 End date <span className="text-[var(--text-muted)]">(optional)</span>
               </label>
               <input
@@ -202,24 +205,24 @@ export function AddPlaceModal({ onClose, onAdd }: AddPlaceModalProps) {
                 type="text"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full rounded border border-[var(--border-subtle)] bg-white px-3 py-2 text-[var(--text-primary)] focus:border-[var(--focus-ring)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]/50"
+                className={inputClass}
                 placeholder="YYYY or YYYY-MM"
               />
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-3 pt-3">
             <button
               type="button"
               onClick={onClose}
-              className="rounded px-4 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2"
+              className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-base)] px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition-all hover:border-[var(--accent-purple)]/40 hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded px-4 py-2 text-sm font-medium text-white bg-[var(--accent-purple)] hover:bg-[var(--accent-purple)]/90 disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2"
+              className="rounded-xl bg-[var(--accent-purple)] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:opacity-90 disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2"
             >
               {submitting ? "Finding address…" : "Add place"}
             </button>

@@ -20,15 +20,15 @@
 }
 
 .place-marker--active {
-  background: linear-gradient(145deg, #4a9b7a, #3d8b6e);
+  background: linear-gradient(145deg, #a78bfa, #8b5cf6);
 }
 
 .place-marker--threatened {
-  background: linear-gradient(145deg, #c9a84a, #b8923d);
+  background: linear-gradient(145deg, #c4b5fd, #a78bfa);
 }
 
 .place-marker--erased {
-  background: linear-gradient(145deg, #b86b6b, #a65d5d);
+  background: linear-gradient(145deg, #7c3aed, #6d28d9);
 }
 
 .place-marker--threatened.pulse {
