@@ -180,16 +180,28 @@ export function StoryPanel({ place, onClose }) {
               <div>
                 <StatusBadge status={place.status} />
               </div>
+              <button
+                type="button"
+                onClick={() => setPanelView("timeline")}
+                className="mt-6 w-full rounded-lg px-4 py-2.5 text-sm font-medium border transition-colors"
+                style={{
+                  borderColor: "var(--border-subtle)",
+                  backgroundColor: "var(--bg-base)",
+                  color: "var(--text-primary)",
+                }}
+              >
+                View timeline
+              </button>
 
               <div className="pt-1">
                 {isExpanding && (
                   <p className="text-sm mb-2" style={{ color: "var(--text-muted)" }}>
-                    Adding more detail…
+                    Loading full story... (Powered by Gemini)
                   </p>
                 )}
                 {!isExpanding && storyText !== (place.story ?? "") && (
                   <p className="text-xs mb-2" style={{ color: "var(--accent-purple)" }}>
-                    Expanded with AI
+                    Expanded with Gemini
                   </p>
                 )}
                 {!isExpanding && storyText === (place.story ?? "") && storyText && (
@@ -258,7 +270,7 @@ export function StoryPanel({ place, onClose }) {
                   </audio>
                 ) : isNarrating ? (
                   <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-                    Generating narration…
+                    Generating narration.. (Powered by IIElevenLabs)
                   </p>
                 ) : (
                   <button
@@ -288,7 +300,7 @@ export function StoryPanel({ place, onClose }) {
                       backgroundColor: "var(--accent-purple)",
                     }}
                   >
-                    Listen to story (ElevenLabs)
+                    Listen to Story
                   </button>
                 )}
               </div>
@@ -362,18 +374,7 @@ export function StoryPanel({ place, onClose }) {
                 )}
               </section>
 
-              <button
-                type="button"
-                onClick={() => setPanelView("timeline")}
-                className="mt-6 w-full rounded-lg px-4 py-2.5 text-sm font-medium border transition-colors"
-                style={{
-                  borderColor: "var(--border-subtle)",
-                  backgroundColor: "var(--bg-base)",
-                  color: "var(--text-primary)",
-                }}
-              >
-                View timeline
-              </button>
+              
             </>
           )}
         </div>

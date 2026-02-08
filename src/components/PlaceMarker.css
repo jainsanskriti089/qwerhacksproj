@@ -2,6 +2,7 @@
   border-radius: 9999px;
   border: 2px solid rgba(255, 255, 255, 0.95);
   cursor: pointer;
+  background: purple;
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
   padding: 0;
   flex-shrink: 0;
