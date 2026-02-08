@@ -1,30 +1,61 @@
 /**
- * Returns a URL for narrated audio from the given text.
- * Mocked for hackathon; works offline without an API key.
+ * Returns a playable blob URL for narrated audio from the given text.
+ * Uses ElevenLabs text-to-speech via /api/narrate (server) or direct API
+ * when server is unavailable (requires VITE_ELEVENLABS_API_KEY).
  */
 
-// Real ElevenLabs integration would:
-// 1. Send POST request with voice_id + text
-// 2. Receive audio stream
-// 3. Store or return a playable URL
+const ELEVENLABS_VOICE = "iCrDUkL56s3C8sCRl7wb"; //Hope
+const ELEVENLABS_MODEL = "eleven_multilingual_v2";
+
+async function narrateViaApi(text: string, apiKey: string): Promise<string> {
+  const url = `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "xi-api-key": apiKey,
+      "Content-Type": "application/json",
+      Accept: "audio/mpeg",
+    },
+    body: JSON.stringify({ text, model_id: ELEVENLABS_MODEL }),
+  });
+  if (!res.ok) {
+    throw new Error(`ElevenLabs API error: ${res.status}`);
+  }
+  const blob = await res.blob();
+  return URL.createObjectURL(blob);
+}
 
 export async function narrateStory(text: string): Promise<string> {
   if (typeof text !== "string" || !text.trim()) {
     return "";
   }
 
+  const trimmed = text.trim();
+
+  // Try server first (keeps API key server-side)
   try {
-    // Simulate async generation (800–1200 ms)
-    await new Promise((resolve) =>
-      setTimeout(resolve, 800 + Math.random() * 400)
-    );
-
-    // Return a placeholder URL that looks like a real audio asset
-    return "/audio/sample.mp3";
-  } catch {
-    return "";
+    const res = await fetch("/api/narrate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: trimmed }),
+    });
+    if (res.ok) {
+      const blob = await res.blob();
+      return URL.createObjectURL(blob);
+    }
+  } catch (err) {
+    console.log("[narrateStory] Server unavailable, trying client API");
   }
-}
 
-// Example usage:
-// const audioUrl = await narrateStory(summary)
+  // Fallback: call ElevenLabs directly (no server needed)
+  const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY;
+  if (apiKey && typeof apiKey === "string") {
+    try {
+      return await narrateViaApi(trimmed, apiKey);
+    } catch (err) {
+      console.warn("[narrateStory] ElevenLabs failed:", err);
+    }
+  }
+
+  return "";
+}

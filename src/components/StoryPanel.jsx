@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { StatusBadge } from "./StatusBadge";
 import { ExperienceForm, getStoredMemory } from "./ExperienceForm";
 import { expandStory } from "../lib/gemini";
+import { narrateStory } from "../lib/elevenlabs";
 import { MemoryTimeline } from "./MemoryTimeline";
 import { getMemoriesFromStorage } from "../lib/memoriesStorage";
 
@@ -18,11 +19,18 @@ export function StoryPanel({ place, onClose }) {
 
   const [storyText, setStoryText] = useState(place?.story ?? "");
   const [isExpanding, setIsExpanding] = useState(false);
+  const [audioUrl, setAudioUrl] = useState("");
+  const [isNarrating, setIsNarrating] = useState(false);
   const expandingForId = useRef(null);
+  const narratingForId = useRef(null);
 
   useEffect(() => {
     if (!place) return;
     setPanelView("story");
+    setAudioUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return "";
+    });
   }, [place]);
 
   const loadQuotesMemories = useCallback(async () => {
@@ -235,21 +243,55 @@ export function StoryPanel({ place, onClose }) {
                 </div>
               )}
 
-              {place.audioUrl && (
-                <div className="pt-2">
-                  <p className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>
-                    Listen
-                  </p>
+              <div className="pt-2">
+                <p className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>
+                  Listen
+                </p>
+                {audioUrl ? (
                   <audio
                     controls
-                    src={place.audioUrl}
+                    src={audioUrl}
                     className="w-full max-w-full"
                     preload="metadata"
                   >
                     Your browser does not support audio.
                   </audio>
-                </div>
-              )}
+                ) : isNarrating ? (
+                  <p className="text-sm" style={{ color: "var(--text-muted)" }}>
+                    Generating narration…
+                  </p>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!storyText?.trim()) return;
+                      const placeId = place.id;
+                      narratingForId.current = placeId;
+                      setIsNarrating(true);
+                      try {
+                        const url = await narrateStory(storyText);
+                        if (narratingForId.current === placeId && url) {
+                          setAudioUrl(url);
+                        }
+                      } catch (err) {
+                        console.warn("[StoryPanel] narrateStory failed:", err);
+                      } finally {
+                        if (narratingForId.current === placeId) {
+                          setIsNarrating(false);
+                        }
+                      }
+                    }}
+                    disabled={!storyText?.trim()}
+                    className="rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50"
+                    style={{
+                      color: "var(--bg-panel)",
+                      backgroundColor: "var(--accent-purple)",
+                    }}
+                  >
+                    Listen to story (ElevenLabs)
+                  </button>
+                )}
+              </div>
 
               {/* <section
                 className="pt-6 mt-6"

@@ -77,6 +77,45 @@ Write a longer narrative (about 3 to 4 sentences) that adds historical backgroun
   }
 });
 
+// ElevenLabs text-to-speech — keep API key server-side
+const elevenLabsKey = process.env.ELEVENLABS_API_KEY || process.env.VITE_ELEVENLABS_API_KEY;
+const ELEVENLABS_VOICE = "JBFqnCBsd6RMkjVDRZzb"; // George - Warm storyteller
+const ELEVENLABS_MODEL = "eleven_multilingual_v2";
+
+app.post("/api/narrate", async (req, res) => {
+  const text = typeof req.body?.text === "string" ? req.body.text.trim() : "";
+  if (!text) {
+    return res.status(400).json({ error: "Missing text" });
+  }
+  if (!elevenLabsKey) {
+    console.log("[ElevenLabs] No API key. Set ELEVENLABS_API_KEY in .env");
+    return res.status(503).json({ error: "Narration unavailable (no API key)" });
+  }
+  try {
+    const url = `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "xi-api-key": elevenLabsKey,
+        "Content-Type": "application/json",
+        Accept: "audio/mpeg",
+      },
+      body: JSON.stringify({ text, model_id: ELEVENLABS_MODEL }),
+    });
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("[ElevenLabs] API error:", response.status, errText.slice(0, 200));
+      return res.status(response.status).json({ error: "Narration failed" });
+    }
+    const audioBuffer = await response.arrayBuffer();
+    res.setHeader("Content-Type", "audio/mpeg");
+    res.send(Buffer.from(audioBuffer));
+  } catch (err) {
+    console.error("[ElevenLabs] Error:", err.message);
+    res.status(500).json({ error: "Narration failed" });
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`API server http://localhost:${PORT} (proxy /api from Vite)`);
