@@ -1,7 +1,18 @@
+import { useState } from "react";
 import { StatusBadge } from "./StatusBadge";
+import { ExperienceForm, getStoredMemory } from "./ExperienceForm";
 
 export function StoryPanel({ place, onClose }) {
+  const [showExperienceForm, setShowExperienceForm] = useState(false);
+  const [, setMemorySaved] = useState(0);
+
   if (!place) return null;
+
+  const placeName = place.name ?? "This place";
+  const placeLocation = place.location ?? place.city ?? "";
+  const savedMemory = getStoredMemory(place.id);
+
+  const handleMemorySaved = () => setMemorySaved((n) => n + 1);
 
   return (
     <>
@@ -75,6 +86,30 @@ export function StoryPanel({ place, onClose }) {
             </blockquote>
           )}
 
+          {savedMemory && (savedMemory.memory?.trim() || savedMemory.monthYear) && (
+            <div
+              className="rounded-lg border-l-4 pl-4 py-3 pr-3"
+              style={{
+                backgroundColor: "var(--bg-warm)",
+                borderColor: "var(--accent-purple)",
+              }}
+              aria-label="Your saved memory"
+            >
+              <p
+                className="text-xs font-medium mb-1"
+                style={{ color: "var(--text-muted)" }}
+              >
+                Your memory{savedMemory.monthYear ? ` · ${savedMemory.monthYear}` : ""}
+              </p>
+              <p
+                className="text-[1rem] leading-relaxed whitespace-pre-wrap m-0"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {savedMemory.memory?.trim() || "(No text saved)"}
+              </p>
+            </div>
+          )}
+
           {place.audioUrl && (
             <div className="pt-2">
               <p
@@ -93,6 +128,43 @@ export function StoryPanel({ place, onClose }) {
               </audio>
             </div>
           )}
+
+          <section
+            className="pt-6 mt-6 border-t"
+            style={{ borderColor: "var(--border-subtle)" }}
+            aria-label="Personal memory"
+          >
+            <p
+              className="text-sm font-medium mb-1"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              Add a personal memory of this place.
+            </p>
+            <p className="text-xs mb-3" style={{ color: "var(--text-muted)" }}>
+              This note is saved only on your device.
+            </p>
+            {!showExperienceForm ? (
+              <button
+                type="button"
+                onClick={() => setShowExperienceForm(true)}
+                className="rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
+                style={{
+                  color: "var(--bg-panel)",
+                  backgroundColor: "var(--accent-purple)",
+                }}
+              >
+                Write a Memory
+              </button>
+            ) : (
+              <ExperienceForm
+                placeId={place.id}
+                placeName={placeName}
+                placeLocation={placeLocation}
+                onClose={() => setShowExperienceForm(false)}
+                onSaved={handleMemorySaved}
+              />
+            )}
+          </section>
         </div>
 
         <footer

@@ -32,6 +32,14 @@ function App() {
           className="map-gradient-overlay"
           aria-hidden="true"
         />
+        {!selectedPlace && (
+          <p
+            className="memory-hint"
+            aria-live="polite"
+          >
+            Click a place on the map to add a personal memory (saved only on your device).
+          </p>
+        )}
       </div>
       <StoryPanel
         place={selectedPlace}
