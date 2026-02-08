@@ -1,4 +1,5 @@
 .app-shell {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -33,4 +34,23 @@
     rgba(253, 248, 243, 0.2) 15%,
     transparent 30%
   );
+}
+
+/* Hint when no place selected — how to add a personal memory */
+.memory-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 5;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #5a5560);
+  background: var(--bg-panel, rgba(255, 255, 255, 0.92));
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  max-width: calc(100% - 2rem);
+  text-align: center;
 }

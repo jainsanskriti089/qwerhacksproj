@@ -87,6 +87,7 @@ a:focus-visible,
   border: 1px solid var(--border-subtle);
   border-radius: 6px;
   cursor: pointer;
+  background: #e0dce5;
 }
 
 .memory-timeline__file-input::file-selector-button:hover,

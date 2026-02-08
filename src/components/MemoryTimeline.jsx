@@ -17,9 +17,9 @@ const currentYear = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: currentYear - 1900 + 2 }, (_, i) => 1900 + i).reverse();
 
 /**
- * @param {{ placeId: string }} props
+ * @param {{ placeId: string, onMemoryAdded?: () => void }} props
  */
-export function MemoryTimeline({ placeId }) {
+export function MemoryTimeline({ placeId, onMemoryAdded }) {
   const [memories, setMemories] = useState([]);
   const [imageBase64, setImageBase64] = useState("");
   const [caption, setCaption] = useState("");
@@ -64,6 +64,7 @@ export function MemoryTimeline({ placeId }) {
     record[placeId] = [...list, entry];
     await saveMemoriesToStorage(record);
     await loadMemories();
+    onMemoryAdded?.();
 
     setImageBase64("");
     setCaption("");
@@ -100,6 +101,75 @@ export function MemoryTimeline({ placeId }) {
         Memories help keep places alive. Add a photo or moment connected to this space.
       </p>
 
+      <div className="relative mb-6">
+        {/* Timeline line */}
+        <div
+          className="absolute left-3 top-0 bottom-0 w-px"
+          style={{ backgroundColor: "var(--border-subtle)" }}
+          aria-hidden="true"
+        />
+        {sorted.length === 0 ? (
+          <p
+            className="text-sm py-4 pl-8 relative"
+            style={{ color: "var(--text-muted)" }}
+          >
+            No memories added yet.
+          </p>
+        ) : (
+          <ul className="list-none p-0 m-0 space-y-6">
+            {sorted.map((entry) => (
+              <li
+                key={entry.id}
+                className="relative pl-8"
+              >
+                <div
+                  className="absolute left-0 w-2.5 h-2.5 rounded-full border-2 top-2"
+                  style={{
+                    backgroundColor: "var(--bg-panel)",
+                    borderColor: "var(--accent-purple)",
+                  }}
+                  aria-hidden="true"
+                />
+                <div
+                  className="rounded-lg overflow-hidden border p-0"
+                  style={{
+                    borderColor: "var(--border-subtle)",
+                    boxShadow: "0 2px 8px rgba(45, 40, 56, 0.06)",
+                  }}
+                >
+                  <div className="aspect-video w-full overflow-hidden bg-[var(--bg-base)]">
+                    <img
+                      src={entry.imageBase64}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      style={{ maxHeight: 200 }}
+                    />
+                  </div>
+                  <div className="p-3">
+                    <p
+                      className="text-xs font-medium mb-1"
+                      style={{ color: "var(--text-muted)" }}
+                    >
+                      {MONTHS[(entry.month ?? 1) - 1]}
+                      {entry.year != null ? ` ${entry.year}` : entry.day != null ? ` ${entry.day}` : ""}
+                    </p>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: "var(--text-primary)" }}
+                    >
+                      {entry.caption}
+                    </p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>
+        Add to timeline
+      </p>
       <form key={formKey} onSubmit={handleSubmit} className="memory-timeline__form space-y-3 mb-6">
         <div>
           <label className="block text-sm font-medium mb-1" style={{ color: "var(--text-secondary)" }}>
@@ -208,79 +278,6 @@ export function MemoryTimeline({ placeId }) {
           Add memory
         </button>
       </form>
-
-      <div className="relative">
-        {/* Timeline line */}
-        <div
-          className="absolute left-3 top-0 bottom-0 w-px"
-          style={{ backgroundColor: "var(--border-subtle)" }}
-          aria-hidden="true"
-        />
-        {sorted.length === 0 ? (
-          <p
-            className="text-sm py-4 pl-8 relative"
-            style={{ color: "var(--text-muted)" }}
-          >
-            No memories added yet.
-          </p>
-        ) : (
-          <ul className="list-none p-0 m-0 space-y-6">
-            {sorted.map((entry) => (
-              <li
-                key={entry.id}
-                className="relative pl-8"
-              >
-                <div
-                  className="absolute left-0 w-2.5 h-2.5 rounded-full border-2 top-2"
-                  style={{
-                    backgroundColor: "var(--bg-panel)",
-                    borderColor: "var(--accent-purple)",
-                  }}
-                  aria-hidden="true"
-                />
-                <div
-                  className="rounded-lg overflow-hidden border p-0"
-                  style={{
-                    borderColor: "var(--border-subtle)",
-                    boxShadow: "0 2px 8px rgba(45, 40, 56, 0.06)",
-                  }}
-                >
-                  <div className="aspect-video w-full overflow-hidden bg-[var(--bg-base)]">
-                    <img
-                      src={entry.imageBase64}
-                      alt=""
-                      className="w-full h-full object-cover"
-                      style={{ maxHeight: 200 }}
-                    />
-                  </div>
-                  <div className="p-3">
-                    <p
-                      className="text-xs font-medium mb-1"
-                      style={{ color: "var(--text-muted)" }}
-                    >
-                      {MONTHS[(entry.month ?? 1) - 1]}
-                      {entry.year != null ? ` ${entry.year}` : entry.day != null ? ` ${entry.day}` : ""}
-                    </p>
-                    <p
-                      className="text-sm leading-relaxed"
-                      style={{ color: "var(--text-primary)" }}
-                    >
-                      {entry.caption}
-                    </p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <p
-        className="text-xs mt-6"
-        style={{ color: "var(--text-muted)" }}
-      >
-        Memories are stored locally on this device.
-      </p>
     </section>
   );
 }
