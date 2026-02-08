@@ -1,0 +1,54 @@
+.place-marker {
+  border-radius: 9999px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.place-marker:hover,
+.place-marker:focus {
+  transform: scale(1.1);
+}
+
+.place-marker:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px white;
+}
+
+.place-marker--active {
+  background-color: #4a7c59;
+}
+
+.place-marker--threatened {
+  background-color: #b8860b;
+}
+
+.place-marker--erased {
+  background-color: #8b4545;
+}
+
+.place-marker--threatened.pulse {
+  animation: place-marker-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes place-marker-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+.place-marker--selected {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 2px white, 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.place-marker--selected:hover,
+.place-marker--selected:focus {
+  transform: scale(1.3);
+}
