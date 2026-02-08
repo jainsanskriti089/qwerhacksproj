@@ -51,10 +51,10 @@ function memoriesApiPlugin() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), memoriesApiPlugin()],
   server: {
     proxy: {
-      '/api': { target: 'http://localhost:3001', changeOrigin: true },
+      '/api/expand-story': { target: 'http://localhost:3001', changeOrigin: true },
     },
   },
 })
