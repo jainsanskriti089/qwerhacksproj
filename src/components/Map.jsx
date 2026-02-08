@@ -64,7 +64,7 @@ export default function Map({
           <Popup className="place-popup" minWidth={240}>
             <div className="place-popup__inner" data-status={place.status}>
               <p className="place-popup__name">{place.name}</p>
-              <p className="place-popup__city">{place.city}</p>
+              <p className="place-popup__city">{place.fullAddress ?? place.city}</p>
               {onSelectPlace && (
                 <button
                   type="button"

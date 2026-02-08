@@ -53,12 +53,13 @@ export function MapView({ places, selectedPlace, onSelect }) {
       const el = document.createElement("div");
       el.className = "mapbox-marker-wrapper";
       const root = createRoot(el);
+      const locationLabel = place.fullAddress ?? place.city ?? "";
       root.render(
         <PlaceMarker
           status={place.status}
           isSelected={selectedPlace?.id === place.id}
           onClick={() => onSelectRef.current(place)}
-          aria-label={`Map marker for ${place.name}, ${place.city}`}
+          aria-label={`Map marker for ${place.name}${locationLabel ? `, ${locationLabel}` : ""}`}
         />
       );
       const marker = new mapboxgl.Marker({ element: el })

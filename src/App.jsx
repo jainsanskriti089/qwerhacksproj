@@ -3,17 +3,27 @@ import { Header } from "./components/Header";
 import { MapView } from "./components/MapView";
 import Map from "./components/Map";
 import { StoryPanel } from "./components/StoryPanel";
-import { places } from "./data/places";
+import { AddPlaceModal } from "./components/AddPlaceModal";
+import { loadAllPlaces, saveUserPlace } from "./data/places";
 import "./App.css";
 
 const hasMapboxToken = !!import.meta.env.VITE_MAPBOX_TOKEN;
 
 function App() {
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [addPlaceModalOpen, setAddPlaceModalOpen] = useState(false);
+  const [places, setPlaces] = useState(() => loadAllPlaces());
+
+  const handleAddPlace = (place) => {
+    saveUserPlace(place);
+    setPlaces(loadAllPlaces());
+    setSelectedPlace(place);
+    setAddPlaceModalOpen(false);
+  };
 
   return (
     <div className="app-shell">
-      <Header />
+      <Header onAddPlace={() => setAddPlaceModalOpen(true)} />
       <div className="map-wrap">
         {hasMapboxToken ? (
           <MapView
@@ -45,6 +55,12 @@ function App() {
         place={selectedPlace}
         onClose={() => setSelectedPlace(null)}
       />
+      {addPlaceModalOpen && (
+        <AddPlaceModal
+          onClose={() => setAddPlaceModalOpen(false)}
+          onAdd={handleAddPlace}
+        />
+      )}
     </div>
   );
 }

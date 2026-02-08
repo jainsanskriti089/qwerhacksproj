@@ -113,20 +113,3 @@ export const places = [
     quote: "Sylvia's was home. When it closed, we lost a piece of the map.",
   },
 ];
-
-/** Alias for places (used by Map.jsx). */
-export const PLACES = places;
-
-/** Default map center (continental US). */
-export const MAP_CENTER = { lat: 39, lng: -98 };
-
-/** Default zoom level. */
-export const MAP_ZOOM = 4;
-
-/**
- * @param {string} id
- * @returns {typeof places[number] | undefined}
- */
-export function getPlaceById(id) {
-  return places.find((p) => p.id === id);
-}

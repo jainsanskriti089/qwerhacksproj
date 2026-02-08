@@ -44,7 +44,11 @@ export function StoryPanel({ place, onClose }) {
   useEffect(() => {
     if (!place) return;
     const placeId = place.id;
+    // Clear AI output and show loading until this place's expansion is ready
+    setStoryText(place.story ?? "");
+    setIsExpanding(true);
     expandingForId.current = placeId;
+
     expandStory({
       name: place.name,
       city: place.city,
@@ -74,8 +78,14 @@ export function StoryPanel({ place, onClose }) {
   if (!place) return null;
 
   const placeName = place.name ?? "This place";
-  const placeLocation = place.location ?? place.city ?? "";
+  const placeLocation = place.fullAddress ?? place.location ?? place.city ?? "";
+  const dateRange = place.years ?? (place.startDate && place.endDate
+    ? `${place.startDate} – ${place.endDate}`
+    : place.startDate
+      ? place.startDate + (place.endDate ? ` – ${place.endDate}` : " – present")
+      : "");
   const savedMemory = getStoredMemory(place.id);
+  const isUserPlace = place.source === "user";
 
   const handleMemorySaved = () => setMemorySaved((n) => n + 1);
 
@@ -135,12 +145,30 @@ export function StoryPanel({ place, onClose }) {
             </>
           ) : (
             <>
-              <p
-                className="text-sm font-medium"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {place.city} · {place.years}
-              </p>
+              {place.fullAddress && (
+                <p
+                  className="text-sm font-medium"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {place.fullAddress}
+                </p>
+              )}
+              {(place.city || dateRange) && (
+                <p
+                  className="text-sm font-medium"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {[place.city, dateRange].filter(Boolean).join(" · ")}
+                </p>
+              )}
+              {isUserPlace && (
+                <p
+                  className="text-xs"
+                  style={{ color: "var(--text-muted)" }}
+                  aria-label="Saved locally"
+                >
+                </p>
+              )}
               <div>
                 <StatusBadge status={place.status} />
               </div>
