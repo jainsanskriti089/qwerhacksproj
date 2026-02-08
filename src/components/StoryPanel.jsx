@@ -1,10 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { StatusBadge } from "./StatusBadge";
 import { ExperienceForm, getStoredMemory } from "./ExperienceForm";
+import { expandStory } from "../lib/gemini";
 
 export function StoryPanel({ place, onClose }) {
   const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [, setMemorySaved] = useState(0);
+
+  const [storyText, setStoryText] = useState(place?.story ?? "");
+  const [isExpanding, setIsExpanding] = useState(false);
+  const expandingForId = useRef(null);
+
+  useEffect(() => {
+    if (!place) return;
+  
+    const placeId = place.id;
+    expandingForId.current = placeId;
+  
+    // no setIsExpanding(true) here
+  
+    expandStory({
+      name: place.name,
+      city: place.city,
+      years: place.years,
+      reason: place.reason ?? "",
+      communities: place.communities ?? [],
+      story: place.story ?? "",
+    })
+      .then((expanded) => {
+        if (expandingForId.current === placeId && expanded?.trim()) {
+          setStoryText(expanded.trim());
+        }
+      })
+      .catch((err) => {
+        console.warn("[StoryPanel] expandStory failed:", err);
+      })
+      .finally(() => {
+        if (expandingForId.current === placeId) {
+          expandingForId.current = null;
+          setIsExpanding(false);
+        }
+      });
+  }, [place]);
+  
+
 
   if (!place) return null;
 
@@ -66,11 +105,35 @@ export function StoryPanel({ place, onClose }) {
           </div>
 
           <div className="pt-1">
+            {isExpanding && (
+              <p
+                className="text-sm mb-2"
+                style={{ color: "var(--text-muted)" }}
+              >
+                Adding more detail…
+              </p>
+            )}
+            {!isExpanding && storyText !== (place.story ?? "") && (
+              <p
+                className="text-xs mb-2"
+                style={{ color: "var(--accent-purple)" }}
+              >
+                Expanded with AI
+              </p>
+            )}
+            {!isExpanding && storyText === (place.story ?? "") && storyText && (
+              <p
+                className="text-xs mb-2"
+                style={{ color: "var(--text-muted)" }}
+              >
+                Original story (expansion unavailable)
+              </p>
+            )}
             <p
               className="text-[1.1rem] leading-relaxed whitespace-pre-wrap"
               style={{ color: "var(--text-primary)" }}
             >
-              {place.story}
+              {storyText}
             </p>
           </div>
 
